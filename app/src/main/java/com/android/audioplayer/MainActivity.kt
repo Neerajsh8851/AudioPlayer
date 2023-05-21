@@ -11,8 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.android.audioplayer.ui.theme.AudioPlayerTheme
+import kotlinx.coroutines.cancel
+import java.io.File
 
 class MainActivity : ComponentActivity() {
+
+    private val audioPlayer = AudioPlayer()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -26,6 +31,17 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val file = File(externalCacheDir, "audio.mp4")
+        audioPlayer.playFromFile(file)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        audioPlayer.cancel()
     }
 }
 
